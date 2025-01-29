@@ -1,0 +1,233 @@
+# Variables
+DOCKER_COMPOSE = docker-compose
+BACKEND_SERVICE = backend
+FRONTEND_SERVICE = frontend
+MONGO_SERVICE = mongo
+
+PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+PROJECT_NAME = {{ PROJECT_NAME }}
+PACKAGE_NAME = {{ PACKAGE_NAME }}
+PYTHON_INTERPRETER = python3
+PYTHON_VERSION = {{ PYTHON_VERSION }}
+
+# echo colors
+ccend = $(shell tput sgr0)
+ccbold = $(shell tput bold)
+ccgreen = $(shell tput setaf 2)
+ccred = $(shell tput setaf 1)
+ccso = $(shell tput smso)
+
+
+
+
+run_app_front:
+	@echo "$(ccso)--> Run the demo app $(ccend)"
+	cd app && streamlit run streamlit.py 
+
+run_app_back:
+	@echo "$(ccso)--> Run the demo app $(ccend)"
+	cd app/backend && python main.py 
+
+run:
+	@echo "$(ccso)--> Run the script demo $(ccend)"
+	cd src && python main_script.py 
+
+
+ifeq (,$(shell which conda))
+HAS_CONDA = False
+else
+HAS_CONDA = True
+endif
+
+ifeq (,$(shell which pyenv))
+HAS_PYENV = False
+else
+HAS_PYENV = True
+endif
+
+ifeq (,$(shell which poetry))
+HAS_POETRY = False
+else
+HAS_POETRY = True
+endif
+
+
+clean:
+	@echo "$(ccso)--> Delete all compile python files $(ccend)"
+	find . -type f -name "*.py[co]" -delete 
+	find . -type d -name "__pycache__" -delete 
+
+test_environment:
+	@echo "$(ccso) --> Test de la presence d'environnement python$(ccend)"
+	$(PYTHON_INTERPRETER) test_env.py
+ifeq (True, $(HAS_CONDA))
+	@echo ">>> Conda is $(ccgreen)available $(ccend)"
+else
+	@echo ">>> Conda is $(ccred)not available $(ccend)"
+endif
+ifeq (True, $(HAS_PYENV))
+	@echo ">>> Pyenv is $(ccgreen)available $(ccend)"
+else
+	@echo ">>> Pyenv is $(ccred)not available $(ccend)"
+endif
+ifeq (True, $(HAS_POETRY))
+	@echo ">>> Poetry is $(ccgreen)available $(ccend)"
+else
+	@echo ">>> Poetry is $(ccred)not available $(ccend)"
+endif
+
+
+dev-install: test_environment
+	@echo "$(ccso) --> Install Python Dependencies (DEV)$(ccend)"
+	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
+	$(PYTHON_INTERPRETER) -m pip install --upgrade pip
+	$(PYTHON_INTERPRETER) -m pip install -r requirements-dev.txt
+	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+	$(PYTHON_INTERPRETER) -m pip install -e .
+
+prod-install: test_environment
+	@echo "$(ccso) --> Install Python Dependencies (PROD)$(ccend)"
+	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
+	$(PYTHON_INTERPRETER) -m pip install --upgrade pip
+	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+	$(PYTHON_INTERPRETER) -m pip install -e .
+
+
+
+create_conda_env:
+	@echo "$(ccso)--> Set up python interpreter environment (conda)$(ccend)"
+ifeq (True,$(HAS_CONDA))
+	@echo ">>> Detected conda, creating conda environment."
+ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
+	conda create --name $(PROJECT_NAME) python=3
+else
+	conda create --name $(PROJECT_NAME) python=2.7
+endif
+	@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
+else
+	@echo ">>> No virtualenv packages installed. Please install one above first"
+endif
+
+## Set up python interpreter environment (pyenv)
+create_pyenv_env:
+	@echo "$(ccso)--> Set up python interpreter environment (pyenv)$(ccend)"
+ifeq (True,$(HAS_PYENV))
+	@echo ">>> Detected pyenv, creating pyenv environment."
+	pyenv virtualenv $(PYTHON_VERSION) $(PROJECT_NAME)
+	@echo ">>> New pyenv created. Activate with: pyenv activate $(PROJECT_NAME)"
+	pyenv local $(PROJECT_NAME) 
+	@echo ">>> By default, the pyenv is activated in the local folder"
+else
+	@echo ">>> No virtualenv packages installed. Please install one above first"
+endif
+
+## Delete pyenv environment
+delete_pyenv_env:
+	@echo "$(ccso)--> Delete pyenv environment$(ccend)"
+	pyenv virtualenv-delete $(PROJECT_NAME)
+
+
+ 
+#################################################################################
+# UTILITIES                                                                 #
+#################################################################################
+
+## Auto-generate the rst file for the Sphinx documentation
+generate_docs:
+	@echo "$(ccso)--> Generate the RST file for the Sphinx documentation$(ccend)"
+	sphinx-apidoc -o ./docs src/
+	@echo "RST files are available at: ./docs/"
+
+# Create the .env-template from .env
+create-env-template: $(ENV_FILE)
+	@echo "$(ccso)--> Create the template file $(TEMPLATE_FILE) from $(ENV_FILE)$(ccend)"
+	@awk -F'=' '{print $$1"=\"\""}' $(ENV_FILE) > $(TEMPLATE_FILE)
+	@echo "Fichier $(TEMPLATE_FILE) créé avec succès"
+
+ 
+#################################################################################
+# PYPI BUILD COMMANDS
+#################################################################################
+ 
+clean_build:
+	@echo "$(ccso)--> Clean Build folders$(ccend)"
+	rm -rf src/$(PACKAGE_NAME).egg-info/ dist/ build/
+
+build: clean_build
+	@echo "$(ccso)--> Build the package$(ccend)"
+	python setup.py sdist bdist_wheel
+
+## Upload the package to  Gitlab Keyrus DS PyPi
+publish: clean_build build
+	@echo "$(ccso)--> Upload the package to Gitlab Keyrus DS PyPi$(ccend)"
+	python -m twine upload --repository gitlab dist/*
+
+
+# Default target
+all: build
+
+# Build all Docker services
+build:
+	@echo "Building Docker images..."
+	$(DOCKER_COMPOSE) build
+
+# Start all services in detached mode
+up:
+	@echo "Starting services..."
+	$(DOCKER_COMPOSE) up -d
+
+# Stop all services
+down:
+	@echo "Stopping services..."
+	$(DOCKER_COMPOSE) down
+
+# Restart all services
+restart: down up
+
+# View logs for all services
+logs:
+	@echo "Showing logs..."
+	$(DOCKER_COMPOSE) logs -f
+
+# View logs for a specific service (e.g., make logs-backend)
+logs-%:
+	@echo "Showing logs for $*..."
+	$(DOCKER_COMPOSE) logs -f $*
+
+# Access the backend container shell
+backend-shell:
+	@echo "Accessing backend container shell..."
+	$(DOCKER_COMPOSE) exec $(BACKEND_SERVICE) /bin/bash
+
+# Access the frontend container shell
+frontend-shell:
+	@echo "Accessing frontend container shell..."
+	$(DOCKER_COMPOSE) exec $(FRONTEND_SERVICE) /bin/bash
+
+# Access the MongoDB container shell
+mongo-shell:
+	@echo "Accessing MongoDB container shell..."
+	$(DOCKER_COMPOSE) exec $(MONGO_SERVICE) mongosh -u root -p example
+
+# Clean up Docker resources (containers, networks, volumes)
+clean:
+	@echo "Cleaning up Docker resources..."
+	$(DOCKER_COMPOSE) down --volumes --remove-orphans
+
+# Help command to list all available targets
+help:
+	@echo "Available targets:"
+	@echo "  build         - Build all Docker images"
+	@echo "  up            - Start all services in detached mode"
+	@echo "  down          - Stop all services"
+	@echo "  restart       - Restart all services"
+	@echo "  logs          - View logs for all services"
+	@echo "  logs-<service> - View logs for a specific service (e.g., logs-backend)"
+	@echo "  backend-shell - Access the backend container shell"
+	@echo "  frontend-shell - Access the frontend container shell"
+	@echo "  mongo-shell   - Access the MongoDB container shell"
+	@echo "  clean         - Clean up Docker resources (containers, networks, volumes)"
+	@echo "  help          - Show this help message"
+
+# Default target
+.PHONY: all build up down restart logs logs-% backend-shell frontend-shell mongo-shell clean help
