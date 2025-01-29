@@ -3,5 +3,7 @@
     "project_name": "My ML Project",
     "python_version": "3.9",
     "author_name": "Your Name",
-    "description": "A template for machine learning projects."
+    "description": "A template for machine learning projects.",
+    "open_source": "yes",
+    "python_interpreter": ["python3", "python"]
 }

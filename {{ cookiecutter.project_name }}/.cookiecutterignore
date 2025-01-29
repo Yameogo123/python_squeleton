@@ -6,7 +6,6 @@ models
 .env
 .env.template
 docker-compose.yaml
-Makefile
 README
 requirements.txt
 requirements-dev.txt

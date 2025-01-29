@@ -1,6 +1,6 @@
-# {{ project_name }}
+# {{ cookiecutter.project_name }}
 
-{{ description }}
+{{ cookiecutter.description }}
 
 ## Running with Docker
 

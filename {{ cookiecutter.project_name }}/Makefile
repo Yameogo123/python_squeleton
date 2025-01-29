@@ -5,10 +5,10 @@ FRONTEND_SERVICE = frontend
 MONGO_SERVICE = mongo
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-PROJECT_NAME = {{ project_name }}
-PACKAGE_NAME = {{ package_name }}
+PROJECT_NAME = {{ cookiecutter.project_name }}
+PACKAGE_NAME = {{ cookiecutter.package_name }}
 PYTHON_INTERPRETER = python3
-PYTHON_VERSION = {{ python_version }}
+PYTHON_VERSION = {{ cookiecutter.python_version }}
 
 # echo colors
 ccend = $(shell tput sgr0)
