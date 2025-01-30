@@ -1,9 +1,10 @@
 {
     "package_name": "my_ml_package",
     "project_name": "My ML Project",
-    "python_version": "3.9",
+    "python_version": "3.10",
     "author_name": "Your Name",
     "description": "A template for machine learning projects.",
     "open_source": "yes",
+    "open_source_license": ["MIT", "BSD-3-Clause", "No license file"],
     "python_interpreter": ["python3", "python"]
 }

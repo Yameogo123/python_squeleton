@@ -13,7 +13,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.db
 *.sqlite3
 .env
 .venv
@@ -21,3 +20,71 @@ venv/
 dist/
 build/
 *.egg-info/
+
+*.py[cod]
+
+# C extensions
+*.so
+
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+.vscode/
+
+# Mac OS-specific storage files
+.DS_Store
+
+
+# vim
+*.swp
+*.swo
+
+# Mypy cache
+.mypy_cache/
+
+# Pyenv cache
+.python-version
+
+# Database
+*.db
+*.rdb
+
+
+# data
+*.csv
+*.parquet
+*.xlsx
+*.txt
+*.html
+

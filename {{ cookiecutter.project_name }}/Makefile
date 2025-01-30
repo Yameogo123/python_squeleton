@@ -32,6 +32,14 @@ run:
 	@echo "$(ccso)--> Run the script demo $(ccend)"
 	cd src && python main_script.py 
 
+run-etl:
+	@echo "$(ccso)--> Starting Dagster webserver $(ccend)"
+	cd src && dagster-webserver -f main_etl.py -p 3000 &
+	@echo "Dagster webserver started with PID"
+	sleep 5; 
+	@echo "$(ccso)--> Running the ETL script $(ccend)"; 
+	cd src && dagster job execute -f main_etl.py; 
+
 
 ifeq (,$(shell which conda))
 HAS_CONDA = False
@@ -59,7 +67,7 @@ clean:
 
 test_environment:
 	@echo "$(ccso) --> Test de la presence d'environnement python$(ccend)"
-	$(PYTHON_INTERPRETER) test_env.py
+	$(PYTHON_INTERPRETER) ./tests/test_environment.py
 ifeq (True, $(HAS_CONDA))
 	@echo ">>> Conda is $(ccgreen)available $(ccend)"
 else
@@ -167,22 +175,22 @@ publish: clean_build build
 all: build
 
 # Build all Docker services
-build:
+dk-build:
 	@echo "Building Docker images..."
 	$(DOCKER_COMPOSE) build
 
 # Start all services in detached mode
-up:
+dk-up:
 	@echo "Starting services..."
 	$(DOCKER_COMPOSE) up -d
 
 # Stop all services
-down:
+dk-down:
 	@echo "Stopping services..."
 	$(DOCKER_COMPOSE) down
 
 # Restart all services
-restart: down up
+dk-restart: dk-dk-down up
 
 # View logs for all services
 logs:
@@ -210,23 +218,23 @@ mongo-shell:
 	$(DOCKER_COMPOSE) exec $(MONGO_SERVICE) mongosh -u root -p example
 
 # Clean up Docker resources (containers, networks, volumes)
-clean:
+dk-clean:
 	@echo "Cleaning up Docker resources..."
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
 # Help command to list all available targets
 help:
 	@echo "Available targets:"
-	@echo "  build         - Build all Docker images"
-	@echo "  up            - Start all services in detached mode"
-	@echo "  down          - Stop all services"
+	@echo "  dk-build         - Build all Docker images"
+	@echo "  dk-up            - Start all services in detached mode"
+	@echo "  dk-down          - Stop all services"
 	@echo "  restart       - Restart all services"
 	@echo "  logs          - View logs for all services"
 	@echo "  logs-<service> - View logs for a specific service (e.g., logs-backend)"
 	@echo "  backend-shell - Access the backend container shell"
 	@echo "  frontend-shell - Access the frontend container shell"
 	@echo "  mongo-shell   - Access the MongoDB container shell"
-	@echo "  clean         - Clean up Docker resources (containers, networks, volumes)"
+	@echo "  dk-clean         - Clean up Docker resources (containers, networks, volumes)"
 	@echo "  help          - Show this help message"
 
 # Default target
