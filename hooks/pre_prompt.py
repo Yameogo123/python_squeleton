@@ -3,7 +3,7 @@ def welcome_note():
     print("""
 
         ======================================================================
-        *** WELCOME! CREATION NOTE ***
+        *** WELCOME! ***
 
         Welcome to the My squeleton.
         This squeleton generates automatically a python project with an ideal
