@@ -1,0 +1,55 @@
+name: Deploy Sphinx Docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'  
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build Sphinx Docs
+        run: |
+          make sphinx-livehtml
+
+      - name: Upload Built Docs
+        uses: actions/upload-artifact@v3
+        with:
+          name: sphinx-docs
+          path: docs/_build/html
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # Ensures deployment only happens after a successful build
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Built Docs
+        uses: actions/download-artifact@v3
+        with:
+          name: sphinx-docs
+          path: docs/_build/html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html

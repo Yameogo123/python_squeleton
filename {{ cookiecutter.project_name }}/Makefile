@@ -9,6 +9,11 @@ PROJECT_NAME = {{ cookiecutter.project_name }}
 PACKAGE_NAME = {{ cookiecutter.package_name }}
 PYTHON_INTERPRETER = python3
 PYTHON_VERSION = {{ cookiecutter.python_version }}
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = ./docs/{{ cookiecutter.package_name }}_docs
+BUILDDIR      = ./docs/mm_docs/_build
+
 
 # echo colors
 ccend = $(shell tput sgr0)
@@ -22,7 +27,7 @@ ccso = $(shell tput smso)
 
 run_app_front:
 	@echo "$(ccso)--> Run the demo app $(ccend)"
-	cd app && streamlit run streamlit.py 
+	cd app/frontend && streamlit run app.py 
 
 run_app_back:
 	@echo "$(ccso)--> Run the demo app $(ccend)"
@@ -133,6 +138,21 @@ endif
 delete_pyenv_env:
 	@echo "$(ccso)--> Delete pyenv environment$(ccend)"
 	pyenv virtualenv-delete $(PROJECT_NAME)
+
+
+
+###############################################
+
+
+## Delete all compiled _build/ folder
+sphinx-clean:
+	@echo "Delete _build directory"
+	rm -r "$(BUILDDIR)"
+
+## Automatically generate HTML documentation
+sphinx-livehtml:
+	sphinx-autobuild "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) --port=8001
+
 
 
  

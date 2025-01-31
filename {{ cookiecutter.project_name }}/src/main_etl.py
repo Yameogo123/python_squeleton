@@ -4,7 +4,6 @@ from {{ cookiecutter.package_name }}.etl.extract import load_data
 from {{ cookiecutter.package_name }}.etl.transform import process_data
 from {{ cookiecutter.package_name }}.etl.load import save_data
 from dagster import job
-import os
 
 # Utiliser la fonction configurer_logger pour obtenir un logger configuré
 logger.info("====================================")
