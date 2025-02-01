@@ -5,10 +5,15 @@ FRONTEND_SERVICE = frontend
 MONGO_SERVICE = mongo
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-PROJECT_NAME = {{ project_name }}
-PACKAGE_NAME = {{ package_name }}
+PROJECT_NAME = {{ cookiecutter.project_name }}
+PACKAGE_NAME = {{ cookiecutter.package_name }}
 PYTHON_INTERPRETER = python3
-PYTHON_VERSION = {{ python_version }}
+PYTHON_VERSION = {{ cookiecutter.python_version }}
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = ./docs/{{ cookiecutter.package_name }}_docs
+BUILDDIR      = ./docs/mm_docs/_build
+
 
 # echo colors
 ccend = $(shell tput sgr0)
@@ -22,7 +27,7 @@ ccso = $(shell tput smso)
 
 run_app_front:
 	@echo "$(ccso)--> Run the demo app $(ccend)"
-	cd app && streamlit run streamlit.py 
+	cd app/frontend && streamlit run app.py 
 
 run_app_back:
 	@echo "$(ccso)--> Run the demo app $(ccend)"
@@ -31,6 +36,14 @@ run_app_back:
 run:
 	@echo "$(ccso)--> Run the script demo $(ccend)"
 	cd src && python main_script.py 
+
+run-etl:
+	@echo "$(ccso)--> Starting Dagster webserver $(ccend)"
+	cd src && dagster-webserver -f main_etl.py -p 3000 &
+	@echo "Dagster webserver started with PID"
+	sleep 5; 
+	@echo "$(ccso)--> Running the ETL script $(ccend)"; 
+	cd src && dagster job execute -f main_etl.py; 
 
 
 ifeq (,$(shell which conda))
@@ -59,7 +72,7 @@ clean:
 
 test_environment:
 	@echo "$(ccso) --> Test de la presence d'environnement python$(ccend)"
-	$(PYTHON_INTERPRETER) test_env.py
+	$(PYTHON_INTERPRETER) ./tests/test_environment.py
 ifeq (True, $(HAS_CONDA))
 	@echo ">>> Conda is $(ccgreen)available $(ccend)"
 else
@@ -127,6 +140,21 @@ delete_pyenv_env:
 	pyenv virtualenv-delete $(PROJECT_NAME)
 
 
+
+###############################################
+
+
+## Delete all compiled _build/ folder
+sphinx-clean:
+	@echo "Delete _build directory"
+	rm -r "$(BUILDDIR)"
+
+## Automatically generate HTML documentation
+sphinx-livehtml:
+	sphinx-autobuild "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) --port=8001
+
+
+
  
 #################################################################################
 # UTILITIES                                                                 #
@@ -167,22 +195,22 @@ publish: clean_build build
 all: build
 
 # Build all Docker services
-build:
+dk-build:
 	@echo "Building Docker images..."
 	$(DOCKER_COMPOSE) build
 
 # Start all services in detached mode
-up:
+dk-up:
 	@echo "Starting services..."
 	$(DOCKER_COMPOSE) up -d
 
 # Stop all services
-down:
+dk-down:
 	@echo "Stopping services..."
 	$(DOCKER_COMPOSE) down
 
 # Restart all services
-restart: down up
+dk-restart: dk-dk-down up
 
 # View logs for all services
 logs:
@@ -210,23 +238,23 @@ mongo-shell:
 	$(DOCKER_COMPOSE) exec $(MONGO_SERVICE) mongosh -u root -p example
 
 # Clean up Docker resources (containers, networks, volumes)
-clean:
+dk-clean:
 	@echo "Cleaning up Docker resources..."
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
 # Help command to list all available targets
 help:
 	@echo "Available targets:"
-	@echo "  build         - Build all Docker images"
-	@echo "  up            - Start all services in detached mode"
-	@echo "  down          - Stop all services"
+	@echo "  dk-build         - Build all Docker images"
+	@echo "  dk-up            - Start all services in detached mode"
+	@echo "  dk-down          - Stop all services"
 	@echo "  restart       - Restart all services"
 	@echo "  logs          - View logs for all services"
 	@echo "  logs-<service> - View logs for a specific service (e.g., logs-backend)"
 	@echo "  backend-shell - Access the backend container shell"
 	@echo "  frontend-shell - Access the frontend container shell"
 	@echo "  mongo-shell   - Access the MongoDB container shell"
-	@echo "  clean         - Clean up Docker resources (containers, networks, volumes)"
+	@echo "  dk-clean         - Clean up Docker resources (containers, networks, volumes)"
 	@echo "  help          - Show this help message"
 
 # Default target
