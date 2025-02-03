@@ -4,6 +4,7 @@ from {{ cookiecutter.package_name }}.etl.extract import load_data
 from {{ cookiecutter.package_name }}.etl.transform import process_data
 from {{ cookiecutter.package_name }}.etl.load import save_data
 from {{ cookiecutter.package_name }}.utils import logger, reader
+from {{ cookiecutter.package_name }}.models.autoML.automl import automl
 
 saw = []
 
@@ -44,6 +45,8 @@ with tabs[1]:
     
 with tabs[2]:
     st.write("Models")
+    
+    display_function_docstrings(automl)
     
 
 with tabs[3]:

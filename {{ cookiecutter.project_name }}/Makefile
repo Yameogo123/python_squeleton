@@ -37,13 +37,23 @@ run:
 	@echo "$(ccso)--> Run the script demo $(ccend)"
 	cd src && python main_script.py 
 
+
 run-etl:
 	@echo "$(ccso)--> Starting Dagster webserver $(ccend)"
-	cd src && dagster-webserver -f main_etl.py -p 3000 &
-	@echo "Dagster webserver started with PID"
+	cd src && dagster-webserver -f main_etl.py -p 3000 & echo $$! > dagster_webserver.PID
+	@echo "Dagster webserver started with PID $$(cat dagster_webserver.PID)"
 	sleep 5; 
 	@echo "$(ccso)--> Running the ETL script $(ccend)"; 
 	cd src && dagster job execute -f main_etl.py; 
+	@echo "$(ccso)--> Stopping Dagster webserver $(ccend)";
+	$(MAKE) stop-port
+	@echo "Dagster webserver stopped"
+
+stop-port:
+	@echo "Stopping process using port 3000"
+	-lsof -ti :3000 | xargs -r kill
+	@echo "Port 3000 is now free"
+	-rm -f dagster_webserver.PID
 
 
 ifeq (,$(shell which conda))

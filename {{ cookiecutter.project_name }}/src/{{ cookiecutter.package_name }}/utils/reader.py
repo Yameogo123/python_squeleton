@@ -33,13 +33,13 @@ def read_file_to_dataframe(input_file, file_info:dict={}):
         if file_name in file_info:
             encodage = file_info[file_name]['encodage']
             delimiteur = file_info[file_name]['delimiteur']
-            return pd.read_csv(input_file, encoding=encodage, delimiter=delimiteur, dtype=str)
+            return pd.read_csv(input_file, encoding=encodage, delimiter=delimiteur)
         else:
             print(f"Aucune information spécifique trouvée pour '{file_name}'. Utilisation des paramètres par défaut.")
-            return pd.read_csv(input_file, dtype=str)
+            return pd.read_csv(input_file)
     elif file_extension == 'xlsx':
         xls = pd.ExcelFile(input_file)
-        return {sheet_name: pd.read_excel(xls, sheet_name=sheet_name, dtype=str) for sheet_name in xls.sheet_names}
+        return {sheet_name: pd.read_excel(xls, sheet_name=sheet_name) for sheet_name in xls.sheet_names}
     elif file_extension == 'parquet':
         return pd.read_parquet(input_file)
     else:

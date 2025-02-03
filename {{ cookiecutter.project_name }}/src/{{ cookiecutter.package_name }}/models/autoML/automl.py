@@ -1,0 +1,21 @@
+import pandas as pd
+from {{ cookiecutter.package_name }}.utils.logger import logger
+from {{ cookiecutter.package_name }}.utils.utils import execute_script
+
+from {{ cookiecutter.package_name }}.models.autoML._timeseries import time_series_automl
+from {{ cookiecutter.package_name }}.models.autoML._unsupervised import unsupervised_automl
+from {{ cookiecutter.package_name }}.models.autoML._supervised import supervised_automl
+
+
+
+def automl(df:pd.DataFrame, task:str="classification", target:str = "", n_clusters:int=4):
+    logger.info("Can take a while depending on the dataset size")
+    if task == "classification" or task == "regression":
+        return execute_script(supervised_automl, df=df, task=task, target=target)
+    elif task == "clustering":
+        return execute_script(unsupervised_automl, df=df, n_clusters=n_clusters)
+    elif task == "time_series":
+        return execute_script(time_series_automl, df= df, date=target)
+    else:
+        raise ValueError(f"Task {task} not supported. Supported tasks are classification, regression, time_series and clustering")
+
