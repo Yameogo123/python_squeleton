@@ -6,7 +6,9 @@ pytest
 cookiecutter
 make
 python-dotenv>=0.5.1
+scipy==1.15
 click
+statsmodels
 
 # visualization
 plotly
@@ -68,3 +70,6 @@ hdbscan
 gower
 autots
 prophet
+
+# analysis
+skimpy
