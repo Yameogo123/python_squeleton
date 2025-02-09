@@ -12,7 +12,7 @@ PYTHON_VERSION = {{ cookiecutter.python_version }}
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = ./docs/{{ cookiecutter.package_name }}_docs
-BUILDDIR      = ./docs/mm_docs/_build
+BUILDDIR      = ./docs/{{ cookiecutter.package_name }}/_build
 
 
 # echo colors
@@ -39,15 +39,9 @@ run:
 
 
 run-etl:
-	@echo "$(ccso)--> Starting Dagster webserver $(ccend)"
-	cd src && dagster-webserver -f main_etl.py -p 3000 & echo $$! > dagster_webserver.PID
-	@echo "Dagster webserver started with PID $$(cat dagster_webserver.PID)"
-	sleep 5; 
 	@echo "$(ccso)--> Running the ETL script $(ccend)"; 
 	cd src && dagster job execute -f main_etl.py; 
-	@echo "$(ccso)--> Stopping Dagster webserver $(ccend)";
-	$(MAKE) stop-port
-	@echo "Dagster webserver stopped"
+	@echo "Dagster job executed successfully";
 
 stop-port:
 	@echo "Stopping process using port 3000"

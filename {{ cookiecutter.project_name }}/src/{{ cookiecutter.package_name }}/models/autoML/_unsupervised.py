@@ -11,7 +11,30 @@ from kmodes.kprototypes import KPrototypes
 from sklearn.cluster import DBSCAN
 
 
-def unsupervised_automl(df:pd.DataFrame, n_clusters:int=4):
+def unsupervised_automl(df: pd.DataFrame, n_clusters: int = 4):
+    """
+        Perform unsupervised AutoML clustering on the given DataFrame using multiple clustering algorithms.
+
+        This function applies HDBSCAN, KPrototypes, KMeans, and DBSCAN clustering algorithms to the input DataFrame
+        and evaluates their performance using the silhouette score. It returns the name of the best performing model.
+
+        Parameters:
+            df (pd.DataFrame): The input DataFrame containing the data to be clustered.
+            n_clusters (int, optional): The number of clusters to form for KPrototypes and KMeans. Default is 4.
+
+        Returns:
+            str: The name of the best performing clustering algorithm based on the silhouette score.
+
+        Notes:
+            - The function uses Gower distance to compute the distance matrix.
+            - The silhouette score is used to evaluate the performance of each clustering algorithm.
+            - The function logs the progress and results of each clustering algorithm.
+
+        Example:
+            >>> best_model = unsupervised_automl(df, n_clusters=3)
+            >>> print(best_model)
+            'kmeans'
+    """
     scores = {}
     dist_matrix = gower.gower_matrix(df).astype(np.float64)
     # Apply HDBSCAN

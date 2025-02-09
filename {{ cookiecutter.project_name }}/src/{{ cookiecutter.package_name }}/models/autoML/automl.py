@@ -8,7 +8,22 @@ from {{ cookiecutter.package_name }}.models.autoML._supervised import supervised
 
 
 
-def automl(df:pd.DataFrame, task:str="classification", target:str = "", n_clusters:int=4):
+def automl(df: pd.DataFrame, task: str = "classification", target: str = "", n_clusters: int = 4):
+    """
+        Perform automated machine learning tasks including classification, regression, clustering, and time series analysis.
+
+        Parameters:
+            df (pd.DataFrame): The input dataframe containing the dataset.
+            task (str): The type of machine learning task to perform. Supported tasks are "classification", "regression", "clustering", and "time_series". Default is "classification".
+            target (str): The target column name for supervised tasks (classification, regression) or the date column for time series tasks. Default is an empty string.
+            n_clusters (int): The number of clusters to form for clustering tasks. Default is 4.
+
+        Returns:
+            The result of the executed automated machine learning task.
+
+        Raises:
+            ValueError: If the specified task is not supported.
+    """
     logger.info("Can take a while depending on the dataset size")
     if task == "classification" or task == "regression":
         return execute_script(supervised_automl, df=df, task=task, target=target)

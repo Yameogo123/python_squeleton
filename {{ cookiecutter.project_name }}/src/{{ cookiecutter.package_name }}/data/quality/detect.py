@@ -79,7 +79,20 @@ def infer_true_type(df:pd.DataFrame):
     return dff
 
 
-def get_errors(df:pd.DataFrame):
+def get_errors(df: pd.DataFrame):
+    """
+        Detects and returns errors in the given DataFrame based on type tests.
+        
+        Parameters:
+            df (pd.DataFrame): The DataFrame to be checked for errors.
+            
+        Returns:
+            pd.DataFrame: A DataFrame containing the detected errors with the following columns:
+                - id: The index or ID of the row with the error.
+                - column: The name of the column with the error.
+                - value_in_error: The erroneous value detected.
+                - detected_type: The detected type of the erroneous value.
+    """
     dico_err = {"id": [], "column": [], "value_in_error": [], "detected_type": []}
     types = handle_type_test(df)
     
