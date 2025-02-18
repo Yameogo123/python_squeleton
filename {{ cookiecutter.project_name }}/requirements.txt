@@ -1,13 +1,19 @@
+# basics
 numpy
 pandas
 scikit-learn
 pytest
 cookiecutter
 make
+python-dotenv>=0.5.1
+scipy==1.15
+click
+statsmodels
+
+# visualization
 plotly
 
-python-dotenv>=0.5.1
-
+# backend
 fastapi[standard]
 email-validator
 passlib[bcrypt]
@@ -19,13 +25,14 @@ uvicorn
 python-multipart
 bcrypt==3.2.0
 
+# ETL orchestration
 dagster 
 dagster-webserver 
 
-click
-
+# frontend
 streamlit
 st-pages
+
 
 {% if cookiecutter.python_interpreter != 'python3' %}
 # backwards compatibility
@@ -33,7 +40,7 @@ pathlib2
 {% endif %}
 
 
-
+# Documentation sphinx
 furo
 sphinx-book-theme
 sphinx
@@ -53,3 +60,16 @@ sphinx-simplepdf
 sphinxcontrib-youtube
 sphinxprettysearchresults
 sphinxcontrib-googleanalytics==0.4
+
+
+# Data Science
+flaml
+xgboost
+kmodes
+hdbscan
+gower
+autots
+prophet
+
+# analysis
+skimpy

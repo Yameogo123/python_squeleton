@@ -21,6 +21,15 @@ Submodules
    :show-inheritance:
 
 
+mp.utils.utils module
+---------------------------------------------------
+
+.. automodule:: {{ cookiecutter.package_name }}.utils.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 
 Module contents
 ---------------

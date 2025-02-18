@@ -13,6 +13,12 @@ Welcome to the {{ cookiecutter.project_name }} documentation
 
    docs/project/index.rst
 
+.. toctree::
+   :caption: Squeleton usage
+   :maxdepth: 0
+
+   docs/usage/index.rst
+
 
 .. toctree::
    :caption: Source Code

@@ -1,7 +1,7 @@
 # Docker
-**/Dockerfile
-**/docker-compose.yml
-**/.dockerignore
+# **/Dockerfile
+# **/docker-compose.yml
+# **/.dockerignore
 
 # Node.js
 **/node_modules
@@ -88,3 +88,4 @@ target/
 *.txt
 *.html
 
+tmp*

@@ -42,11 +42,17 @@ cookiecutter https://github.com/Yameogo123/python_squeleton.git
 ├── src                <- Source code for use in this project.
 │   ├── __init__.py    <- Makes src a Python module
 │   │
-│   ├── etl           <- Scripts to transform data
+│   ├── features       <- for engineering
+│   │    ├── etl       <- Scripts to transform data
+│   │    └──
 │   │
-│   ├── features       <- Scripts to turn raw data into features for modeling
+│   ├── data           <- Scripts for data quality 
+│   │    ├── quality       
+│   │    └── visualization
 │   │
 │   ├── models         <- Scripts to train models and use them for predictions
+│   │    ├── MLOps
+│   │    └── autoML
 │   │
 │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
 │       └── visualize.py
