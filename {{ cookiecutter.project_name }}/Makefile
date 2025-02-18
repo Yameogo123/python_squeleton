@@ -5,14 +5,14 @@ FRONTEND_SERVICE = frontend
 MONGO_SERVICE = mongo
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-PROJECT_NAME = {{ cookiecutter.project_name }}
-PACKAGE_NAME = {{ cookiecutter.package_name }}
+PROJECT_NAME = {{ cookiecutter.project_name|lower|replace(' ', '_') }}
+PACKAGE_NAME = {{ cookiecutter.package_name|lower|replace(' ', '_') }}
 PYTHON_INTERPRETER = python3
 PYTHON_VERSION = {{ cookiecutter.python_version }}
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = ./docs/{{ cookiecutter.package_name }}_docs
-BUILDDIR      = ./docs/{{ cookiecutter.package_name }}/_build
+SOURCEDIR     = ./docs/{{ cookiecutter.package_name|lower|replace(' ', '_') }}_docs
+BUILDDIR      = ./docs/{{ cookiecutter.package_name|lower|replace(' ', '_') }}/_build
 
 
 # echo colors
@@ -27,20 +27,20 @@ ccso = $(shell tput smso)
 
 run_app_front:
 	@echo "$(ccso)--> Run the demo app $(ccend)"
-	cd app/frontend && streamlit run app.py 
+	cd app/frontend && streamlit run app.py
 
 run_app_back:
 	@echo "$(ccso)--> Run the demo app $(ccend)"
-	cd app/backend && python main.py 
+	cd app/backend && python main.py
 
 run:
 	@echo "$(ccso)--> Run the script demo $(ccend)"
-	cd src && python main_script.py 
+	cd src && python main_script.py
 
 
 run-etl:
-	@echo "$(ccso)--> Running the ETL script $(ccend)"; 
-	cd src && dagster job execute -f main_etl.py; 
+	@echo "$(ccso)--> Running the ETL script $(ccend)";
+	cd src && dagster job execute -f main_etl.py;
 	@echo "Dagster job executed successfully";
 
 stop-port:
@@ -71,8 +71,8 @@ endif
 
 clean:
 	@echo "$(ccso)--> Delete all compile python files $(ccend)"
-	find . -type f -name "*.py[co]" -delete 
-	find . -type d -name "__pycache__" -delete 
+	find . -type f -name "*.py[co]" -delete
+	find . -type d -name "__pycache__" -delete
 
 test_environment:
 	@echo "$(ccso) --> Test de la presence d'environnement python$(ccend)"
@@ -132,7 +132,7 @@ ifeq (True,$(HAS_PYENV))
 	@echo ">>> Detected pyenv, creating pyenv environment."
 	pyenv virtualenv $(PYTHON_VERSION) $(PROJECT_NAME)
 	@echo ">>> New pyenv created. Activate with: pyenv activate $(PROJECT_NAME)"
-	pyenv local $(PROJECT_NAME) 
+	pyenv local $(PROJECT_NAME)
 	@echo ">>> By default, the pyenv is activated in the local folder"
 else
 	@echo ">>> No virtualenv packages installed. Please install one above first"
@@ -159,7 +159,7 @@ sphinx-livehtml:
 
 
 
- 
+
 #################################################################################
 # UTILITIES                                                                 #
 #################################################################################
@@ -176,11 +176,11 @@ create-env-template: $(ENV_FILE)
 	@awk -F'=' '{print $$1"=\"\""}' $(ENV_FILE) > $(TEMPLATE_FILE)
 	@echo "Fichier $(TEMPLATE_FILE) créé avec succès"
 
- 
+
 #################################################################################
 # PYPI BUILD COMMANDS
 #################################################################################
- 
+
 clean_build:
 	@echo "$(ccso)--> Clean Build folders$(ccend)"
 	rm -rf src/$(PACKAGE_NAME).egg-info/ dist/ build/
