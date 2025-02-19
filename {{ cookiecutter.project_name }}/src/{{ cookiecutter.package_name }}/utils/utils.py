@@ -121,7 +121,7 @@ def _is_none_nan_null(x):
     """
     return x is None or pd.isnull(x)
 
-def _is_date(x, format:str = "Ymd"):
+def _is_date(x, format:str = "ymd"):
     """
         Check if a given string is a valid date in the specified format.
 
@@ -142,23 +142,23 @@ def _is_date(x, format:str = "Ymd"):
         date_split = re.split(r"[/\-]", value)
         if len(date_split) != 3:
             return False
-        if format == "Ymd":
-            regex = re.compile(r"^\d{4}[/\-.]\d{2}[/\-.]\d{2}$")
+        if format == "ymd":
+            regex = re.compile(r"^\d{4}[/\-]\d{2}[/\-]\d{2}$")
             year = len(date_split[0]) == 4
             month = 1<=int(date_split[1])<=12
             day = 1<=int(date_split[2])<=31
             is_date = regex.match(x) and year and month and day
-        elif format == "mdY":
-            regex = re.compile(r"^\d{2}[/\-.]\d{2}[/\-.]\d{4}$")
-            year = len(date_split[2]) == 4
-            month = 1<=int(date_split[0])<=12
-            day = 1<=int(date_split[1])<=31
-            is_date = regex.match(x) and year and month and day
         elif format == "dmy":
-            regex = re.compile(r"^\d{2}[/\-.]\d{2}[/\-.]\d{4}$")
+            regex = re.compile(r"^\d{2}[/\-]\d{2}[/\-]\d{4}$")
             year = len(date_split[2]) == 4
             month = 1<=int(date_split[1])<=12
             day = 1<=int(date_split[0])<=31
+            is_date = regex.match(x) and year and month and day
+        elif format == "mdy":
+            regex = re.compile(r"^\d{2}[/\-]\d{2}[/\-]\d{4}$")
+            year = len(date_split[2]) == 4
+            month = 1<=int(date_split[0])<=12
+            day = 1<=int(date_split[1])<=31
             is_date = regex.match(x) and year and month and day
         else:
             return False
@@ -266,12 +266,12 @@ def infer_type(x):
     """
     if execute_script_v2(_is_none_nan_null, x=x):
         return "nan"
-    elif _is_date(x, "Ymd") :
-        return "date_Ymd"
-    elif _is_date(x, "mdY") :
-        return "date_mdY"
+    elif _is_date(x, "ymd") :
+        return "date_ymd"
     elif _is_date(x, "dmy") :
         return "date_dmy"
+    elif _is_date(x, "mdy") :
+        return "date_mdy"
     elif execute_script_v2(_is_bool, x=x):
         return "bool"
     elif execute_script_v2(_is_mail, x=x):
