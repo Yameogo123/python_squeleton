@@ -18,7 +18,7 @@ def are_df_columns(df:pd.DataFrame, columns:list):
 
 def execute_script(function, message:str="erreur de script: ", *args, **kwargs):
     """
-        Executes a given function with provided arguments and keyword arguments, 
+        Executes a given function with provided arguments and keyword arguments,
         and handles exceptions by raising a ValueError with a custom message.
 
         Parameters:
@@ -35,10 +35,10 @@ def execute_script(function, message:str="erreur de script: ", *args, **kwargs):
                     a ValueError is raised with the provided custom message and the original exception message.
     """
     try:
-        return function(*args, **kwargs)  
+        return function(*args, **kwargs)
     except Exception as e:
-        raise ValueError(f"{message}: {e}")  
-    
+        raise ValueError(f"{message}: {e}")
+
 def execute_script_v2(function, *args, **kwargs):
     """
         Executes a given function with provided arguments and keyword arguments.
@@ -55,10 +55,10 @@ def execute_script_v2(function, *args, **kwargs):
             Exception: Catches all exceptions and returns False.
     """
     try:
-        return function(*args, **kwargs)  
+        return function(*args, **kwargs)
     except Exception:
         return False
-    
+
 
 
 def save_to_parquet(df:pd.DataFrame, file:str, index:bool = False):
@@ -106,7 +106,7 @@ def _is_numeric(x):
         return True
     except Exception:
         return False
-    
+
 def _is_none_nan_null(x):
     """
         Check if the input value is None, NaN, or Null.
@@ -127,7 +127,7 @@ def _is_date(x, format:str = "Ymd"):
 
         Args:
             x (str): The string to check.
-            format (str): The date format to validate against. 
+            format (str): The date format to validate against.
                         Supported formats are "Ymd" (default), "mdY", and "dmy".
 
         Returns:
@@ -136,26 +136,26 @@ def _is_date(x, format:str = "Ymd"):
         Raises:
             Exception: If an error occurs during date validation.
     """
-    sep = ["/", "-", "."]
     is_date = False
     try:
-        date_split = re.split("|".join(sep), x)
+        value = str(x)
+        date_split = re.split(r"[/\-]", value)
         if len(date_split) != 3:
             return False
         if format == "Ymd":
-            regex = re.compile(r"^\d{4}[/-.]\d{2}[/-.]\d{2}$")
+            regex = re.compile(r"^\d{4}[/\-.]\d{2}[/\-.]\d{2}$")
             year = len(date_split[0]) == 4
             month = 1<=int(date_split[1])<=12
             day = 1<=int(date_split[2])<=31
             is_date = regex.match(x) and year and month and day
         elif format == "mdY":
-            regex = re.compile(r"^\d{2}[/-.]\d{2}[/-.]\d{4}$")
+            regex = re.compile(r"^\d{2}[/\-.]\d{2}[/\-.]\d{4}$")
             year = len(date_split[2]) == 4
             month = 1<=int(date_split[0])<=12
             day = 1<=int(date_split[1])<=31
             is_date = regex.match(x) and year and month and day
         elif format == "dmy":
-            regex = re.compile(r"^\d{2}[/-.]\d{2}[/-.]\d{4}$")
+            regex = re.compile(r"^\d{2}[/\-.]\d{2}[/\-.]\d{4}$")
             year = len(date_split[2]) == 4
             month = 1<=int(date_split[1])<=12
             day = 1<=int(date_split[0])<=31

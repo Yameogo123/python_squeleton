@@ -12,7 +12,7 @@ PYTHON_VERSION = {{ cookiecutter.python_version }}
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = ./docs/{{ cookiecutter.package_name|lower|replace(' ', '_') }}_docs
-BUILDDIR      = ./docs/{{ cookiecutter.package_name|lower|replace(' ', '_') }}/_build
+BUILDDIR      = ./docs/{{ cookiecutter.package_name|lower|replace(' ', '_') }}_docs/_build
 
 
 # echo colors
@@ -26,12 +26,17 @@ ccso = $(shell tput smso)
 
 
 run_app_front:
-	@echo "$(ccso)--> Run the demo app $(ccend)"
+	@echo "$(ccso)--> Run the streamlit demo app $(ccend)"
 	cd app/frontend && streamlit run app.py
 
 run_app_back:
-	@echo "$(ccso)--> Run the demo app $(ccend)"
+	@echo "$(ccso)--> Run the fastAPI demo app $(ccend)"
 	cd app/backend && python main.py
+
+run_app_analysis:
+	@echo "$(ccso)--> Run the analysis of processed data $(ccend)"
+	cd src && python main_analysis.py
+	@echo "$(ccso)--> Find everything in the analysis folder '/reports/analysis/correlation' $(ccend)"
 
 run:
 	@echo "$(ccso)--> Run the script demo $(ccend)"

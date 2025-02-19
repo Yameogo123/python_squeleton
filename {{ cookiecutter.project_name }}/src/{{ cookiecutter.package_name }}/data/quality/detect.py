@@ -59,19 +59,19 @@ def infer_true_type(df:pd.DataFrame):
                 most_frequent = most_frequent[0] if not most_frequent.empty else "object"
             else:
                 most_frequent = "object"
-            
+
             # Définir le bon type
             if most_frequent in ["date_Ymd", "date_mdY", "date_dmY"]:
                 dff[col] = pd.to_datetime(dff[col], errors='coerce')
             elif most_frequent == "numeric":
                 dff[col] = pd.to_numeric(dff[col], errors='coerce')
-            elif most_frequent in ["mail", "url", "phone", "categorical", "unknow"]:
+            elif most_frequent in ["mail", "url", "phone", "categorical", "unknown"]:
                 dff[col] = dff[col].astype("object")
             elif most_frequent == "bool":
                 dff[col] = dff[col].astype("bool")
-            else: 
+            else:
                 dff[col] = dff[col].astype("object")
-        
+
         except Exception as e:
             print(f"⚠️ Erreur sur la colonne {col}: {e}")
             dff[col] = dff[col].astype("object")  # Sécurité en cas d'erreur
@@ -82,10 +82,10 @@ def infer_true_type(df:pd.DataFrame):
 def get_errors(df: pd.DataFrame):
     """
         Detects and returns errors in the given DataFrame based on type tests.
-        
+
         Parameters:
             df (pd.DataFrame): The DataFrame to be checked for errors.
-            
+
         Returns:
             pd.DataFrame: A DataFrame containing the detected errors with the following columns:
                 - id: The index or ID of the row with the error.
@@ -95,17 +95,17 @@ def get_errors(df: pd.DataFrame):
     """
     dico_err = {"id": [], "column": [], "value_in_error": [], "detected_type": []}
     types = handle_type_test(df)
-    
+
     for col in df.columns:
         cond = types[f"{col}_§_supposition"]=="bad"
         tp = types.loc[cond]
-        
+
         if tp.empty:
             continue
-        
+
         n = tp.shape[0]
         idx = idx = tp["_id_"].values if "_id_" in tp.columns else df.index[cond]
-        
+
         value_in_error = df.loc[cond, col].values[:n]
         detected_type = tp[f"{col}_§_type"].values[:n]
 

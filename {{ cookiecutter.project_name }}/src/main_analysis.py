@@ -43,7 +43,7 @@ for name in dataframes.keys():
     if not errors.empty:
         logger.info(f"saving disqualities in {OUTPUT_PATH}/detection")
         save_to_parquet(errors, f"{OUTPUT_PATH}/detection/{name}.parquet")
-    
+
     logger.info(f"==== SAVE CORRELATION OF {name} DATA ====")
     corrs = get_correlation(df)
     if save_correlation:

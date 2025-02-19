@@ -13,8 +13,8 @@ setup(
     python_requires='>=3.9',
     entry_points={
         'console_scripts': [
-            'cli_main_script = {{ cookiecutter.package_name }}.cli_main_script:main',
+            'cli_main_script = {{ cookiecutter.package_name }}.main_script:main',
         ]
-    } 
+    }
 
 )

@@ -3,13 +3,12 @@ from fastapi.responses import StreamingResponse
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from middleware.middleware import signJWT, JWTBearer
+from decouple import config
 
-import os
+PORT = config("PORT")
 
 # Create FastAPI app
 app = FastAPI()
-
-PORT = os.getenv("PORT")
 
 
 app.add_middleware(
