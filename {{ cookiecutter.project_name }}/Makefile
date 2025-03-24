@@ -6,13 +6,13 @@ MONGO_SERVICE = mongo
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROJECT_NAME = {{ cookiecutter.project_name }}
-PACKAGE_NAME = {{ cookiecutter.package_name }}
+PACKAGE_NAME = {{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}
 PYTHON_INTERPRETER = python3
 PYTHON_VERSION = {{ cookiecutter.python_version }}
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = ./docs/{{ cookiecutter.package_name }}_docs
-BUILDDIR      = ./docs/{{ cookiecutter.package_name }}/_build
+SOURCEDIR     = ./docs/{{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}_docs
+BUILDDIR      = ./docs/{{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}/_build
 
 
 # echo colors
@@ -26,21 +26,26 @@ ccso = $(shell tput smso)
 
 
 run_app_front:
-	@echo "$(ccso)--> Run the demo app $(ccend)"
-	cd app/frontend && streamlit run app.py 
+	@echo "$(ccso)--> Run the streamlit demo app $(ccend)"
+	cd app/frontend && streamlit run app.py
 
 run_app_back:
-	@echo "$(ccso)--> Run the demo app $(ccend)"
-	cd app/backend && python main.py 
+	@echo "$(ccso)--> Run the fastAPI demo app $(ccend)"
+	cd app/backend && python main.py
+
+run_app_analysis:
+	@echo "$(ccso)--> Run the analysis of processed data $(ccend)"
+	cd src && python main_analysis.py
+	@echo "$(ccso)--> Find everything in the analysis folder '/reports/analysis/correlation' $(ccend)"
 
 run:
 	@echo "$(ccso)--> Run the script demo $(ccend)"
-	cd src && python main_script.py 
+	cd src && python main_script.py
 
 
 run-etl:
-	@echo "$(ccso)--> Running the ETL script $(ccend)"; 
-	cd src && dagster job execute -f main_etl.py; 
+	@echo "$(ccso)--> Running the ETL script $(ccend)";
+	cd src && dagster job execute -f main_etl.py;
 	@echo "Dagster job executed successfully";
 
 stop-port:
@@ -71,8 +76,8 @@ endif
 
 clean:
 	@echo "$(ccso)--> Delete all compile python files $(ccend)"
-	find . -type f -name "*.py[co]" -delete 
-	find . -type d -name "__pycache__" -delete 
+	find . -type f -name "*.py[co]" -delete
+	find . -type d -name "__pycache__" -delete
 
 test_environment:
 	@echo "$(ccso) --> Test de la presence d'environnement python$(ccend)"
@@ -116,11 +121,11 @@ create_conda_env:
 ifeq (True,$(HAS_CONDA))
 	@echo ">>> Detected conda, creating conda environment."
 ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
-	conda create --name $(PROJECT_NAME) python=3
+	conda create --name $(PACKAGE_NAME) python=3
 else
-	conda create --name $(PROJECT_NAME) python=2.7
+	conda create --name $(PACKAGE_NAME) python=2.7
 endif
-	@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
+	@echo ">>> New conda env created. Activate with:\nsource activate $(PACKAGE_NAME)"
 else
 	@echo ">>> No virtualenv packages installed. Please install one above first"
 endif
@@ -130,9 +135,9 @@ create_pyenv_env:
 	@echo "$(ccso)--> Set up python interpreter environment (pyenv)$(ccend)"
 ifeq (True,$(HAS_PYENV))
 	@echo ">>> Detected pyenv, creating pyenv environment."
-	pyenv virtualenv $(PYTHON_VERSION) $(PROJECT_NAME)
-	@echo ">>> New pyenv created. Activate with: pyenv activate $(PROJECT_NAME)"
-	pyenv local $(PROJECT_NAME) 
+	pyenv virtualenv $(PYTHON_VERSION) $(PACKAGE_NAME)
+	@echo ">>> New pyenv created. Activate with: pyenv activate $(PACKAGE_NAME)"
+	pyenv local $(PACKAGE_NAME) 
 	@echo ">>> By default, the pyenv is activated in the local folder"
 else
 	@echo ">>> No virtualenv packages installed. Please install one above first"
@@ -141,7 +146,7 @@ endif
 ## Delete pyenv environment
 delete_pyenv_env:
 	@echo "$(ccso)--> Delete pyenv environment$(ccend)"
-	pyenv virtualenv-delete $(PROJECT_NAME)
+	pyenv virtualenv-delete $(PACKAGE_NAME)
 
 
 
@@ -159,7 +164,7 @@ sphinx-livehtml:
 
 
 
- 
+
 #################################################################################
 # UTILITIES                                                                 #
 #################################################################################
@@ -176,11 +181,11 @@ create-env-template: $(ENV_FILE)
 	@awk -F'=' '{print $$1"=\"\""}' $(ENV_FILE) > $(TEMPLATE_FILE)
 	@echo "Fichier $(TEMPLATE_FILE) créé avec succès"
 
- 
+
 #################################################################################
 # PYPI BUILD COMMANDS
 #################################################################################
- 
+
 clean_build:
 	@echo "$(ccso)--> Clean Build folders$(ccend)"
 	rm -rf src/$(PACKAGE_NAME).egg-info/ dist/ build/
