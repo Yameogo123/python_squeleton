@@ -1,21 +1,21 @@
-{{ cookiecutter.package_name }}.utils package
+{{ cookiecutter.package_slug }}.utils package
 =============================================
 
 Submodules
 ----------
 
-{{ cookiecutter.package_name }}.utils.reader module
+{{ cookiecutter.package_slug }}.utils.reader module
 ---------------------------------------------------
 
-.. automodule:: {{ cookiecutter.package_name }}.utils.reader
+.. automodule:: {{ cookiecutter.package_slug }}.utils.reader
    :members:
    :undoc-members:
    :show-inheritance:
 
-{{ cookiecutter.package_name }}.utils.logger module
+{{ cookiecutter.package_slug }}.utils.logger module
 ---------------------------------------------------
 
-.. automodule:: {{ cookiecutter.package_name }}.utils.logger
+.. automodule:: {{ cookiecutter.package_slug }}.utils.logger
    :members:
    :undoc-members:
    :show-inheritance:
@@ -24,7 +24,7 @@ Submodules
 mp.utils.utils module
 ---------------------------------------------------
 
-.. automodule:: {{ cookiecutter.package_name }}.utils.utils
+.. automodule:: {{ cookiecutter.package_slug }}.utils.utils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -34,7 +34,7 @@ mp.utils.utils module
 Module contents
 ---------------
 
-.. automodule:: {{ cookiecutter.package_name }}.utils
+.. automodule:: {{ cookiecutter.package_slug }}.utils
    :members:
    :undoc-members:
    :show-inheritance:
