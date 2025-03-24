@@ -1,8 +1,8 @@
 
 import pandas as pd
-from {{ cookiecutter.package_name }}.utils.logger import logger
+from {{ cookiecutter.package_slug }}.utils.logger import logger
 from flaml.automl.automl import AutoML
-from {{ cookiecutter.package_name }}.utils.utils import are_df_columns
+from {{ cookiecutter.package_slug }}.utils.utils import are_df_columns
 
 
 def supervised_automl(df: pd.DataFrame, task: str, target: str):

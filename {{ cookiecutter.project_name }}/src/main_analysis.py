@@ -1,9 +1,9 @@
 
 #%% import
-from {{ cookiecutter.package_name }}.utils.reader import Reader
-from {{ cookiecutter.package_name }}.utils.logger import logger
-from {{ cookiecutter.package_name }}.data.analysis.analysis import save_desc, get_correlation, detect_errors
-from {{ cookiecutter.package_name }}.utils.utils import save_to_parquet
+from {{ cookiecutter.package_slug }}.utils.reader import Reader
+from {{ cookiecutter.package_slug }}.utils.logger import logger
+from {{ cookiecutter.package_slug }}.data.analysis.analysis import save_desc, get_correlation, detect_errors
+from {{ cookiecutter.package_slug }}.utils.utils import save_to_parquet
 from skimpy import skim
 import os
 from tabulate import tabulate

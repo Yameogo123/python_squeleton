@@ -6,13 +6,13 @@ MONGO_SERVICE = mongo
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROJECT_NAME = {{ cookiecutter.project_name }}
-PACKAGE_NAME = {{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}
+PACKAGE_NAME = {{ cookiecutter.package_slug }}
 PYTHON_INTERPRETER = python3
 PYTHON_VERSION = {{ cookiecutter.python_version }}
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = ./docs/{{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}_docs
-BUILDDIR      = ./docs/{{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}/_build
+SOURCEDIR     = ./docs/{{ cookiecutter.package_slug }}_docs
+BUILDDIR      = ./docs/{{ cookiecutter.package_slug }}/_build
 
 
 # echo colors

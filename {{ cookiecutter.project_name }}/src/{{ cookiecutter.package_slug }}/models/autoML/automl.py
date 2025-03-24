@@ -1,10 +1,10 @@
 import pandas as pd
-from {{ cookiecutter.package_name }}.utils.logger import logger
-from {{ cookiecutter.package_name }}.utils.utils import execute_script
+from {{ cookiecutter.package_slug }}.utils.logger import logger
+from {{ cookiecutter.package_slug }}.utils.utils import execute_script
 
-from {{ cookiecutter.package_name }}.models.autoML._timeseries import time_series_automl
-from {{ cookiecutter.package_name }}.models.autoML._unsupervised import unsupervised_automl
-from {{ cookiecutter.package_name }}.models.autoML._supervised import supervised_automl
+from {{ cookiecutter.package_slug }}.models.autoML._timeseries import time_series_automl
+from {{ cookiecutter.package_slug }}.models.autoML._unsupervised import unsupervised_automl
+from {{ cookiecutter.package_slug }}.models.autoML._supervised import supervised_automl
 
 
 

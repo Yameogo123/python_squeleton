@@ -1,5 +1,5 @@
 
-from {{ cookiecutter.package_name }}.utils.utils import infer_type
+from {{ cookiecutter.package_slug }}.utils.utils import infer_type
 import pandas as pd
 import numpy as np
 

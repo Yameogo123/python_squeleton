@@ -1,5 +1,5 @@
-from {{ cookiecutter.package_name }}.utils.logger import logger
-from {{ cookiecutter.package_name }}.data.quality.detect import infer_true_type, get_errors
+from {{ cookiecutter.package_slug }}.utils.logger import logger
+from {{ cookiecutter.package_slug }}.data.quality.detect import infer_true_type, get_errors
 import pandas as pd
 from skimpy import skim_get_data
 import numpy as np

@@ -1,6 +1,6 @@
 from dagster import op
-from {{ cookiecutter.package_name }}.utils.reader import Reader
-from {{ cookiecutter.package_name }}.utils.logger import logger
+from {{ cookiecutter.package_slug }}.utils.reader import Reader
+from {{ cookiecutter.package_slug }}.utils.logger import logger
 import os
 
 RAW_PATH = os.path.join("..", "data", "raw")

@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from {{ cookiecutter.package_name }}.utils.logger import configurer_logger
+from {{ cookiecutter.package_slug }}.utils.logger import configurer_logger
 
 
 # Use the configurer_logger function to get a configured logger
