@@ -1,15 +1,15 @@
 import streamlit as st
 import inspect
 
-from {{ cookiecutter.package_name }}.features.etl.extract import load_data
-from {{ cookiecutter.package_name }}.features.etl.transform import process_data
-from {{ cookiecutter.package_name }}.features.etl.load import save_data
+from {{ cookiecutter.package_slug }}.features.etl.extract import load_data
+from {{ cookiecutter.package_slug }}.features.etl.transform import process_data
+from {{ cookiecutter.package_slug }}.features.etl.load import save_data
 
-from {{ cookiecutter.package_name }}.data.analysis import analysis
-from {{ cookiecutter.package_name }}.data.quality import correct, detect
+from {{ cookiecutter.package_slug }}.data.analysis import analysis
+from {{ cookiecutter.package_slug }}.data.quality import correct, detect
 
-from {{ cookiecutter.package_name }}.utils import logger, reader, utils
-from {{ cookiecutter.package_name }}.models.autoML.automl import automl
+from {{ cookiecutter.package_slug }}.utils import logger, reader, utils
+from {{ cookiecutter.package_slug }}.models.autoML.automl import automl
 
 saw = []
 

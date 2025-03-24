@@ -1,7 +1,7 @@
 from dagster import op
 import numpy as np
-from {{ cookiecutter.package_name }}.utils.logger import logger
-from {{ cookiecutter.package_name }}.utils.utils import rename_column
+from {{ cookiecutter.package_slug }}.utils.logger import logger
+from {{ cookiecutter.package_slug }}.utils.utils import rename_column
 
 
 @op

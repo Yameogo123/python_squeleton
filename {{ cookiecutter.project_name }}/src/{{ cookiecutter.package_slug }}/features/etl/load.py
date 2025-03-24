@@ -1,5 +1,5 @@
 from dagster import op, AssetMaterialization, MetadataValue, Out
-from {{ cookiecutter.package_name }}.utils.logger import logger
+from {{ cookiecutter.package_slug }}.utils.logger import logger
 import os 
 
 PROCESSSED_PATH = os.path.join("..", "data", "processed")

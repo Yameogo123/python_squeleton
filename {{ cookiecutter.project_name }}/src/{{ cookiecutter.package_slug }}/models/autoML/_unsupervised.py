@@ -1,6 +1,6 @@
 
 import pandas as pd
-from {{ cookiecutter.package_name }}.utils.logger import logger
+from {{ cookiecutter.package_slug }}.utils.logger import logger
 
 from sklearn.metrics import silhouette_score
 import hdbscan
