@@ -15,6 +15,6 @@ setup(
         'console_scripts': [
             'cli_main_script = {{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}.cli_main_script:main',
         ]
-    } 
+    }
 
 )

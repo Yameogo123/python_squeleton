@@ -26,21 +26,26 @@ ccso = $(shell tput smso)
 
 
 run_app_front:
-	@echo "$(ccso)--> Run the demo app $(ccend)"
-	cd app/frontend && streamlit run app.py 
+	@echo "$(ccso)--> Run the streamlit demo app $(ccend)"
+	cd app/frontend && streamlit run app.py
 
 run_app_back:
-	@echo "$(ccso)--> Run the demo app $(ccend)"
-	cd app/backend && python main.py 
+	@echo "$(ccso)--> Run the fastAPI demo app $(ccend)"
+	cd app/backend && python main.py
+
+run_app_analysis:
+	@echo "$(ccso)--> Run the analysis of processed data $(ccend)"
+	cd src && python main_analysis.py
+	@echo "$(ccso)--> Find everything in the analysis folder '/reports/analysis/correlation' $(ccend)"
 
 run:
 	@echo "$(ccso)--> Run the script demo $(ccend)"
-	cd src && python main_script.py 
+	cd src && python main_script.py
 
 
 run-etl:
-	@echo "$(ccso)--> Running the ETL script $(ccend)"; 
-	cd src && dagster job execute -f main_etl.py; 
+	@echo "$(ccso)--> Running the ETL script $(ccend)";
+	cd src && dagster job execute -f main_etl.py;
 	@echo "Dagster job executed successfully";
 
 stop-port:
@@ -71,8 +76,8 @@ endif
 
 clean:
 	@echo "$(ccso)--> Delete all compile python files $(ccend)"
-	find . -type f -name "*.py[co]" -delete 
-	find . -type d -name "__pycache__" -delete 
+	find . -type f -name "*.py[co]" -delete
+	find . -type d -name "__pycache__" -delete
 
 test_environment:
 	@echo "$(ccso) --> Test de la presence d'environnement python$(ccend)"
@@ -159,7 +164,7 @@ sphinx-livehtml:
 
 
 
- 
+
 #################################################################################
 # UTILITIES                                                                 #
 #################################################################################
@@ -176,11 +181,11 @@ create-env-template: $(ENV_FILE)
 	@awk -F'=' '{print $$1"=\"\""}' $(ENV_FILE) > $(TEMPLATE_FILE)
 	@echo "Fichier $(TEMPLATE_FILE) créé avec succès"
 
- 
+
 #################################################################################
 # PYPI BUILD COMMANDS
 #################################################################################
- 
+
 clean_build:
 	@echo "$(ccso)--> Clean Build folders$(ccend)"
 	rm -rf src/$(PACKAGE_NAME).egg-info/ dist/ build/

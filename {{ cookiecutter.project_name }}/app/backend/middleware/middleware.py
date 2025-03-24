@@ -2,7 +2,7 @@
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import time
-import jwt 
+import jwt
 from decouple import config
 
 

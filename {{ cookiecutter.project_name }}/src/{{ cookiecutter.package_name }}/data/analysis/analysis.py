@@ -29,8 +29,8 @@ def save_desc(df: pd.DataFrame, output_dir: str, name: str):
     for desc in description.keys():
         if desc not in ['Data Summary', 'Data Types']:
             logger.info(f"saving...: {output_dir}/{name}_{desc}_description.parquet")
-            pd.DataFrame(description[desc]).astype(str).to_parquet(f"{output_dir}/{name}_{desc}_description.parquet", index=False)
-            
+            pd.DataFrame(description[desc]).astype(str).to_parquet(f"{output_dir}/{name}_{desc}_description.parquet")
+
 
 
 # spearman
