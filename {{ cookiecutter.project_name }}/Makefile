@@ -101,18 +101,20 @@ endif
 
 dev-install: test_environment
 	@echo "$(ccso) --> Install Python Dependencies (DEV)$(ccend)"
-	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
-	$(PYTHON_INTERPRETER) -m pip install --upgrade pip
-	$(PYTHON_INTERPRETER) -m pip install -r requirements-dev.txt
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
-	$(PYTHON_INTERPRETER) -m pip install -e .
+	$(PYTHON_INTERPRETER) -m pip install uv
+	$(PYTHON_INTERPRETER) -m uv pip install -U pip setuptools wheel
+	$(PYTHON_INTERPRETER) -m uv pip install --upgrade pip
+	$(PYTHON_INTERPRETER) -m uv pip install -r requirements-dev.txt
+	$(PYTHON_INTERPRETER) -m uv pip install -r requirements.txt
+	$(PYTHON_INTERPRETER) -m uv pip install -e .
 
 prod-install: test_environment
 	@echo "$(ccso) --> Install Python Dependencies (PROD)$(ccend)"
-	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
-	$(PYTHON_INTERPRETER) -m pip install --upgrade pip
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
-	$(PYTHON_INTERPRETER) -m pip install -e .
+	$(PYTHON_INTERPRETER) -m pip install uv
+	$(PYTHON_INTERPRETER) -m uv pip install -U pip setuptools wheel
+	$(PYTHON_INTERPRETER) -m uv pip install --upgrade pip
+	$(PYTHON_INTERPRETER) -m uv pip install -r requirements.txt
+	$(PYTHON_INTERPRETER) -m uv pip install -e .
 
 
 
