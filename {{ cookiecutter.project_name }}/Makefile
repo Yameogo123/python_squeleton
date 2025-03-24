@@ -6,13 +6,13 @@ MONGO_SERVICE = mongo
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROJECT_NAME = {{ cookiecutter.project_name }}
-PACKAGE_NAME = {{ cookiecutter.package_name }}
+PACKAGE_NAME = {{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}
 PYTHON_INTERPRETER = python3
 PYTHON_VERSION = {{ cookiecutter.python_version }}
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = ./docs/{{ cookiecutter.package_name }}_docs
-BUILDDIR      = ./docs/{{ cookiecutter.package_name }}/_build
+SOURCEDIR     = ./docs/{{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}_docs
+BUILDDIR      = ./docs/{{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}/_build
 
 
 # echo colors
@@ -116,11 +116,11 @@ create_conda_env:
 ifeq (True,$(HAS_CONDA))
 	@echo ">>> Detected conda, creating conda environment."
 ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
-	conda create --name $(PROJECT_NAME) python=3
+	conda create --name $(PACKAGE_NAME) python=3
 else
-	conda create --name $(PROJECT_NAME) python=2.7
+	conda create --name $(PACKAGE_NAME) python=2.7
 endif
-	@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
+	@echo ">>> New conda env created. Activate with:\nsource activate $(PACKAGE_NAME)"
 else
 	@echo ">>> No virtualenv packages installed. Please install one above first"
 endif
@@ -130,9 +130,9 @@ create_pyenv_env:
 	@echo "$(ccso)--> Set up python interpreter environment (pyenv)$(ccend)"
 ifeq (True,$(HAS_PYENV))
 	@echo ">>> Detected pyenv, creating pyenv environment."
-	pyenv virtualenv $(PYTHON_VERSION) $(PROJECT_NAME)
-	@echo ">>> New pyenv created. Activate with: pyenv activate $(PROJECT_NAME)"
-	pyenv local $(PROJECT_NAME) 
+	pyenv virtualenv $(PYTHON_VERSION) $(PACKAGE_NAME)
+	@echo ">>> New pyenv created. Activate with: pyenv activate $(PACKAGE_NAME)"
+	pyenv local $(PACKAGE_NAME) 
 	@echo ">>> By default, the pyenv is activated in the local folder"
 else
 	@echo ">>> No virtualenv packages installed. Please install one above first"
@@ -141,7 +141,7 @@ endif
 ## Delete pyenv environment
 delete_pyenv_env:
 	@echo "$(ccso)--> Delete pyenv environment$(ccend)"
-	pyenv virtualenv-delete $(PROJECT_NAME)
+	pyenv virtualenv-delete $(PACKAGE_NAME)
 
 
 

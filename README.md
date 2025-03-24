@@ -9,7 +9,11 @@ Welcome to my python squeleton. This will show you how to use it directly for yo
 - you need then to install cookiecutter `pip install cookiecutter`
 
 #### 2. project initialization
+
+```
 cookiecutter https://github.com/Yameogo123/python_squeleton.git 
+```
+
 
 #### 3. the squeleton 
 

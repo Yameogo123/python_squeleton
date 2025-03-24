@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="{{ cookiecutter.package_name }}",
+    name="{{ cookiecutter.package_name | lower | replace(' ', '_') | replace('-', '_') }}",
     version="0.1.0",
     description="{{ cookiecutter.description }}",
     author=[
@@ -13,7 +13,7 @@ setup(
     python_requires='>=3.9',
     entry_points={
         'console_scripts': [
-            'cli_main_script = {{ cookiecutter.package_name }}.cli_main_script:main',
+            'cli_main_script = {{ cookiecutter.package_name | lower | replace(" ", "_") | replace("-", "_") }}.cli_main_script:main',
         ]
     } 
 
