@@ -16,10 +16,6 @@ cookiecutter https://github.com/Yameogo123/python_squeleton.git
 ```
 
 
-```
-cookiecutter https://github.com/Yameogo123/python_squeleton.git
-```
-
 #### 3. the squeleton
 
 ```
