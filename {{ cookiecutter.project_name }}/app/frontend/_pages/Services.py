@@ -1,5 +1,5 @@
 import streamlit as st
-from {{ package_slug.package_name }}.utils.reader import Reader
+from {{ cookiecutter.package_slug }}.utils.reader import Reader
 import os
 
 def get_file_names_without_extension(folder_path):
